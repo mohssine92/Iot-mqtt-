@@ -1,0 +1,16 @@
+{
+  "name": "platziverse-tools",
+  "version": "1.0.0",
+  "description": "IoT Platform - IoNode Tools",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mohssine",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
+    "platziverse-tools": "file:../platziverse-tools"
+  }
+}

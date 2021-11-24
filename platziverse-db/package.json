@@ -1,0 +1,39 @@
+{
+  "name": "platziverse-db",
+  "version": "1.0.0",
+  "description": "A simple IoT Platform - DB Module : este es modul de Db ",
+  "main": "index.js",
+  "scripts": {
+    "test": "set DEBUG=platziverse:* && nyc --reporter=lcov --report-dir=coverage/ ava tests/* --verbose && start coverage/lcov-report/index.html",
+    "setup": "SET DEBUG=platziverse:* && node setup.js",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohssine92/platziverse.git"
+  },
+  "author": "mohssine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohssine92/platziverse/issues"
+  },
+  "homepage": "https://github.com/mohssine92/platziverse#readme",
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "nyc": "^15.1.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^11.1.2",
+    "sqlite3": "^5.0.2",
+    "standard": "^16.0.3"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "debug": "^4.3.2",
+    "defaults": "^1.0.3",
+    "inquirer": "^8.1.2",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "platziverse-tools": "file:../platziverse-tools",
+    "sequelize": "^6.6.5"
+  }
+}

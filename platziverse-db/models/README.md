@@ -1,0 +1,1 @@
+* de esta manera hemos implementado los modelos de nuestras entidades de db utulizando sequelize
