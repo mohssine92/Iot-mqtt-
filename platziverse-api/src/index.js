@@ -1,4 +1,4 @@
-//Variables de entorno -para poder tener variables del entorno seguras
+
 require('dotenv').config();
 
 
@@ -55,3 +55,7 @@ server.listen();
   
   // ver payload de jwt en consola 
   //Buffer.from('eyJwZXJtaXNzaW9ucyI6WyJtZXRyaWNzOnJlYWQiXSwidXNlcm5hbWUiOiJtb3NzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0=','base64').toString()
+
+
+
+// aws big data , sql postgres payton -- limpieza de datos data science - 

@@ -7,16 +7,16 @@ module.exports = function setupMetric (MetricModel, AgentModel) {
      
         return MetricModel.findAll({ // usar modelo de metric + join
            attributes: [ 'type' ], // puedo pasar arreglo con nombres del attributos especificos que quiero que returne , en este caso solo un attributo que es type
-           group: [ 'type' ], // agrupar por tipo - no repite mismo tipo 
-           include: [{ // join - puedo haver con diff tablas - en este caso lo hago solo con una tabla
+           group: [ 'type' ], // agrupar por tipo - no repite mismo tipo . copu , memoria <= ok , no =>  cpu cpu memori memori ,  
+           include: [{ // join - puedo hacer con diff tablas - en este caso lo hago solo con una tabla
              attributes: [], // de Agent : defino los attribues que me returnar - en este caso ne va ser ninguno 
-             model: AgentModel,
-             where: { // la condicion de busqueda de mi consulta
+             model: AgentModel, // join lo hago  solo con este modleo . puedo hacerlo con varias .
+             where: { // ese joi se va a filtrar por uuid 
                uuid
              }
            }],
            raw: true // como es consulta con subconsulta (consulta comleja) - le digo me returne solo json() - No objeto complejo
-        }) // only return Type , necesito ver Sgente que metricas esta reportando , un agente reporta de una a n metricas : reporta memoria , cpu , disco duro , esta consula me dica los tipos de metricas que este agente esta reportando
+        }) // raw debe especificarlo cuando hago la consuta compleja siempre 
  
   }  
 
@@ -25,16 +25,16 @@ module.exports = function setupMetric (MetricModel, AgentModel) {
     
     return MetricModel.findAll({
          
-        attributes: [ 'id', 'type', 'value', 'createdAt' ], // de la tabla metrics
-        where: { // filtrar por type
+        attributes: [ 'id', 'type', 'value', 'createdAt' ], // los attr que me interesa returnar del modelo Metric
+        where: { // filtrar por type en Metric
           type
         },
         limit: 20, // en la grafica quiero ver solo 20 metricas
-        order: [[ 'createdAt', 'DESC' ]], // primero ultimo 
-        include: [{ // join - 
-          attributes: [],
+        order: [[ 'createdAt', 'DESC' ]], // ordenar usando fecha campo , ultimo , penultimo .. 
+        include: [{ // join : 
+          attributes: [], 
           model: AgentModel,
-          where: { // condicion por ...
+          where: { // condicion defiltro en modleo Agent 
             uuid
           }
         }],
@@ -42,8 +42,7 @@ module.exports = function setupMetric (MetricModel, AgentModel) {
 
     })
 
-  } // devolver toda metricas(limit) del agent con el tipo especificado 
-
+  } 
 
 
   async function create (uuid, metric) { // recibe uiid del agente , y la informacion de la metrica como tal que nosotros vamos a almacenar 
@@ -57,16 +56,11 @@ module.exports = function setupMetric (MetricModel, AgentModel) {
 
       Object.assign( metric, { agentId: agent.id }) // es clonar Objeto metric y asignarle otra prop que es agentId Obviamente que el agente debe existir en nuestros DB 
       const result = await MetricModel.create(metric)
-      return result.toJSON() // depues de grabar usando Sequelize me returna Object comolejo de Sequelize Lo transformo en formato Json (que es el estandar) 
+      return result.toJSON() 
 
     }
-    /* la metrica la almaceno con agenteId y me deberia hacer la relacion - que un agente tiene muchas metricas     
-     * aqui no vamos a necesitar actualizar una metrica , en la logica de la app siempre voy a agregar una metrica nueva , yo nunca voy a actualizar las metricas , yo con el Agent si la voy a actualizar , porque 
-     * tengo una variable para identificar si el agente esta connectado o no . 
-     * yo creo el agente , marcarlo como conectado , y se el agente se desconecta voy actualzando el agente marcarlo como desconectado par poder manejar ese tipo de estado 
-     * con la creacion de metrico yo no necesito hacer esto 
-     */
-
+    // aqui no necesito actualizar  metrica , la logica de la app siempre voy a agregar una metrica nueva 
+    
 
   }
 
@@ -78,7 +72,4 @@ module.exports = function setupMetric (MetricModel, AgentModel) {
   }
 
 
-} /* para pruebas unitarias de este servcio de Metric en el video 24 , hay un repo de github en coments  
-   * si llego a necesitar
-   *
-  */
+} 

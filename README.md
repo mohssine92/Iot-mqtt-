@@ -1,10 +1,15 @@
 
-# Node avanzado - comunicacion en tiempo real 
-```
+# Usage del modul
+
+```js
  
-modul db
-modul mqtt : message Broker
-modul agent tipe Event Emmiter
-modul Api
+const setupDatabase = require('platziverse-db')
+
+setupDabase(config).then(db => {
+  const { Agent, Metric } = db
+
+}).catch(err => console.error(err))
+
+ 15 - posrtgres comandos .
 
 ```

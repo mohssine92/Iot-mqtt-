@@ -5,20 +5,20 @@
   "description": "A simplelot Platform - MQTT Server",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production && node src/server.js",
-    "start-dev": "SET DEBUG=platziverse:* && nodemon src/server.js",
+    "start": "NODE_ENV=production node src/server.js",
+    "start-dev": "DEBUG=platziverse:* nodemon src/server.js",
     "lint": "standard"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohssine92/platziverse.git#readme"
+    "url": "git+https://github.com/mohssine92/Iot-mqtt-.git#readme"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mohssine92/platziverse/issues"
+    "url": "https://github.com/mohssine92/Iot-mqtt-.git/issues"
   },
-  "homepage": "https://github.com/mohssine92/platziverse/tree/readme#readme",
+  "homepage": "https://github.com/mohssine92/Iot-mqtt-.git/tree/readme#readme",
   "devDependencies": {
     "nodemon": "^2.0.12",
     "standard": "^16.0.3"

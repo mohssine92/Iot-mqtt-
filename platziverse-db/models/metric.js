@@ -19,4 +19,4 @@ module.exports = function setupMetricModel (config) {
     }
 
   })
-} // funcion de configuracion del modelo metric
+} // funcion de configuracion del modelo metric - asi podemos definir cualquier entidad segun logica de negocio 

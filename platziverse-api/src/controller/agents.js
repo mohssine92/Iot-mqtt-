@@ -10,10 +10,12 @@ const { MyServices } = require('../db/db');
 // obtener todo los agentes
 const GetAgents = async(req, res = response, next ) =>{
 
-    const { user } = req;   
+    const { user } = req;  // paylod jwt = user  
     const { uuid } = user;
 
     try {
+
+   
 
 
       const { Agent } = await MyServices();
@@ -38,8 +40,8 @@ const GetAgents = async(req, res = response, next ) =>{
 
       }else{
 
-        debug(`request give all agent of only this username`);
-        console.log(user.username) 
+        debug(`request give all agent of only this username : ${user.username}`);
+        
         agents = await Agent.findByUsername( user.username );
 
     
@@ -54,6 +56,7 @@ const GetAgents = async(req, res = response, next ) =>{
       });
       
     } catch (error) {
+      // next para pasrle err al mdlr de express 
       return next(error);
     }
 
@@ -61,7 +64,7 @@ const GetAgents = async(req, res = response, next ) =>{
 
 
 // specific agent
-const GetAgent = async(req, res = response , next ) =>{
+const GetAgent = async(req, res = response , next ) =>{ // next lo pasa al manejador de err mdl after
  
 
 

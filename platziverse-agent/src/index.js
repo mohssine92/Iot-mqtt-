@@ -1,21 +1,20 @@
 'use strict'
 
-const EvenEmitter = require('events') // object del core de node donde extendemos funciones para crar muestro objeto de tipo Eventemmiter
-const os = require('os')
+const EvenEmitter = require('events') // object del core de node donde extendemos funciones para crear nuestro objeto de tipo Eventemmiter
+const os = require('os') // modulo de systema operativo de node 
 const util = require('util') // objeto trae una funcion para convertir un callback a un promise
 const debug = require('debug')('platziverse:agent')
 const defaults = require('defaults')
-const mqtt = require('mqtt') // objeto para creaciob de cliente mqtt que va usar una instancia deun agente para comunicar a un server mqtt : message broker
-const uuid = require('uuid') // generacion de uuid
+const mqtt = require('mqtt') // cliente en este caso 
+const uuid = require('uuid') // generacion de uuid unico : as tomo la desicion si retransmito payload o no , lo logico no transmito a mi mismo 
 const {
   utils: { parsePayload }
 } = require('platziverse-tools')
 
 
-
+// implemenatacion de object tipo Event emmiter y integrarlo con cliente mqtt .
 
 class PlatziverseAgent extends EvenEmitter {
-
 
 
     constructor(options) {
@@ -24,15 +23,16 @@ class PlatziverseAgent extends EvenEmitter {
         // Default options used internally if not options were provided
         this._defaultOptions = {
           name: 'unknown',
-          username: 'root',
+          username: 'platzi',
           interval: 5000,
           mqtt: { host: 'mqtt://localhost' }
         }
-    
-        this._options = defaults(options, this._defaultOptions) // toma por defecto - si llega props en object lo sobreescribe
+        
+        // toma por defecto , y redefine lo que llega en options arg 
+        this._options = defaults(options, this._defaultOptions) 
         this._started = false
-        this._timer = null
-        this._client = null
+        this._timer = null // guardar ref de timer para poder destrocer 
+        this._client = null // be cliente mqtt 
         this._agentId = null
         this._metrics = new Map()
     }
@@ -49,26 +49,27 @@ class PlatziverseAgent extends EvenEmitter {
 
     connect() {
 
-        if (!this._started) { // !false = true - 
-          // Connect the mqtt server and then set the agent started status to true
+        // si el timer no ha arancado 
+        if (!this._started) { 
+          
+          // cliente mqtt para publicar metricas al message broker y para recibir  mensages del message broker de otras instancias de agente . siempre cuando el agente este connectado 
           this._client = mqtt.connect(this._options.mqtt.host)
-          this._started = true  // asi no puede entrar ya que la instacia de agente a esta altura ya va empezar a emiitir - y se puede desconectar 
+          this._started = true  // timer arrancado referencia para saber .. 
     
-          // Agent will be subscribed to these topics 
-          // estos topis pueden ser publisg por server mqtt o instace agente
-          // en  this._client.on('message', esta pendiente de topics por parte de agent instance
+          // subscribir cliente mqtt que es prop de la clase , a estos topicos : asi cada instancia ... escucha broadcast del message broker a estos topics 
           this._client.subscribe('agent/connected')
           this._client.subscribe('agent/disconnected')
           this._client.subscribe('agent/message')
     
-          this._client.on('connect', () => {
+          this._client.on('connect', () => { // evento del cliente mqtt cuando see conecta 
+
             // When the client is connected assign an unique uuid to the agent
             this._agentId = uuid.v4()
     
-            // Agent emit the event connected with the uuid created - lo emite enteramente en el contenedor del objeto  instanciado 
+            // emito evento internamente que debo escucharlo internamente dentro de la instancia (usamos class de tipo event emmiter )
             this.emit('connected', this._agentId)
     
-            // Emit the message each interval time defined
+          
             this._timer = setInterval(async () => {
              
                 // If there are one or more metrics we build the message to send
@@ -82,11 +83,10 @@ class PlatziverseAgent extends EvenEmitter {
                     pid: process.pid
                   },
                   metrics: [],
-                  timestamp: new Date().getTime()
+                  //timestamp: new Date().getTime()
                 }
     
-                // If the handleEvent function provided has a callback
-                // the callback is converted into a promise with `util.promisify`
+               
                 for (let [metric, func] of this._metrics) {
                   if (func.length === 1) { // verificar si una funcion tiene un arg pues es callback
                     func = util.promisify(func)
@@ -95,21 +95,31 @@ class PlatziverseAgent extends EvenEmitter {
                   // The promise then is resolve to send the message
                   message.metrics.push({
                     type: metric,
-                    value: await Promise.resolve(func()) // puesto que es una promesa la resuelvo obtengo la produccion de la misma
+                    value: await Promise.resolve(func()), // puesto que es una promesa la resuelvo obtengo la produccion de la misma
+                    timestamp: new Date().getTime()
                   })
                 }
     
                 debug(`[agent-sending]: ${message}`)
     
-                // Use the client instance to publish the message with topic 
+                // este cliente mqtt de esta instancia PlatziverseAgent  emite este topic al messagebroker .
                 this._client.publish('agent/message', JSON.stringify(message))
-                this.emit('message', message) // emite mesaje internamente en el contenedor 
+                // esta instancia PlatziverseAgent emite este evento internamente para escucha internamente 
+                // para escuchar mi mensaje que emito al message broker
+                this.emit('message', message) 
               }
-            }, this._options.interval)
+
+              
+
+
+            }, this._options.interval) // intervalo de tiempo de redisparo 
+           
+            
 
           })
     
-          // lesenings topics betwen agents and server mqtt
+          // evento de cliente mqtt cuando reciba mensaje del message broker al que esta connectado 
+          // recuerda estas es una clasee de tipo event emmiter y implemnta internamente cliente mqtt , es decir vamos a tener n numero de instancia = n numero de clientes mqtt .
           this._client.on('message', (topic, payload) => {
             // If the topic is some of these parsed the payload and emit according the topic
             if (
@@ -120,18 +130,19 @@ class PlatziverseAgent extends EvenEmitter {
               const parsedPayload = parsePayload(payload)
               const { agent } = parsedPayload
 
-              // return true si cumple la condicion - siemplemente emitir internemente un mesage que viene desde el message broker que puede ser ha sido 
-              // emitido de la misma instancia agente hacia el message broker y ha sido devuelto 
+              // la idea no escuchar al algun mensaje que fue emitido por la misma instancia al message broker que a su vez lo destrubuye a todas instancia de esta classe PlatziversAgent
               const shouldBroadcast =
-                parsedPayload && agent && agent.uuid !== this._agentId
+                parsedPayload && agent && agent.uuid !== this._agentId  // true / false 
 
     
               if (shouldBroadcast) {
-                this.emit(topic, parsedPayload) // asi coge topic y lo emita interbamente para poder escucxharlo en la instancia
+                this.emit(topic, parsedPayload) // emito internamente - porsupuesto si mio no llega a emitirlo si de otras instancias llega a emitir internamente y lo puedo ver 
+                // asi tanto como otras instancia seran notificados de mis metricas yo tambien sera notificado de las metricas de otros , yo : es instancia Agent  
               }
             }
           })
-    
+          
+          // la idea si pasa cualquier err . desconecta la instancia al servidor mqtt , 
           this._client.on('error', () => this.disconnect())
         }
 
@@ -139,12 +150,13 @@ class PlatziverseAgent extends EvenEmitter {
     } // proceso cuando un agente esta conectado al message broker
 
     disconnect() {
-        // Handle the disconnection event
+        // desconecto solo si el timer inicializo , servicio fue inicializo 
         if (this._started) {
-          clearInterval(this._timer)
-          this._started = false // asi no pued edesconectar un agente ya desconectado y puede conectar el mismo 
-          this.emit('disconnected', this._agentId) // internamente emito ....
-          this._client.end() // cortar conexion con el servidor mqtt
+          clearInterval(this._timer) // limpiar timer no va emitir cada x tiempo (interval) : gracias a la ref this._started
+          this._started = false // asi no puedo connectar de nuevo dentro la misma instancia despues de desconectar 
+          this.emit('disconnected', this._agentId)  // internamente emito ....
+          // desconnectar cliente mqtt al server mqtt : aqui veremos como controlamos la desconexion 
+          this._client.end() 
         }
     }
     

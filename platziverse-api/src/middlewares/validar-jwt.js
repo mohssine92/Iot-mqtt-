@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // capa validacion ,  Middelware perzonalizado  se dispara con 3 args 
 const validarJWT = async( req = request, res = response, next ) => {  // res = response para tener el tipado tener ayuda al escribir
  
-    const token = req.header('x-token'); // console.log(token);
+    const token = req.header('apiToken'); // console.log(token);
     
     if ( !token ) {  // primer o verificar si llega el token 
         return res.status(401).json({
@@ -17,13 +17,8 @@ const validarJWT = async( req = request, res = response, next ) => {  // res = r
     try {
         
        
-        const payload = jwt.verify( token, process.env.SECRETORPRIVATEKEY ); // console.log(uid);
-        
-        
-         //console.log('``````````')
-         //console.log(uuid)
-         //console.log('``````````````')
-
+        const payload = jwt.verify( token, process.env.SECRETORPRIVATEKEY); // console.log(uid);
+      
          req.user = payload;
      
      
@@ -32,7 +27,7 @@ const validarJWT = async( req = request, res = response, next ) => {  // res = r
          
     } catch (error) {
         
-        console.log(error);
+   
         res.status(401).json({
             msg: 'Token no válido'
         })

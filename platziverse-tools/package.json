@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
+    "debug": "^4.3.2",
     "dotenv": "^10.0.0",
     "platziverse-tools": "file:../platziverse-tools"
   }

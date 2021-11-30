@@ -14,6 +14,7 @@ const dbConnection = async ( ) => {
         username: process.env.DB_USER || 'platzi',
         password: process.env.DB_PASS || '123456',
         host: process.env.DB_HOST || 'localhost',
+        port : process.env.PORT || 5433,
         dialect: 'postgres',
         logging: s => debug(s), 
         //setup: true  recordemos esta prop borra la db : asi si la dejo en true  borra toda la db cada vez arrancamos el servidor mqtt
@@ -31,8 +32,6 @@ const dbConnection = async ( ) => {
 
       debug('connect to db - geted services ')
 
-
-
    }catch(err) {
        console.log(err);
        throw new Err('Error a la hora de iniciar la base de datos');
@@ -47,7 +46,7 @@ const MyServices = async () => {
   const Metric = services.get('Metric');
   const Agent  = services.get('Agent');
  
-  return {
+  return { 
      Metric,
      Agent
   }

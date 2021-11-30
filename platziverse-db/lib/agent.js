@@ -3,13 +3,10 @@
 
 
 
-/* En esta funcion vamos a definir funciones de nuestro servicio 
- *  yo solo quiero exportar las funciones que yo quiera al usuario que esta utulizando me modulo
-*/
-module.exports = function setupAgent (AgentModel) { // recibe modelo de agente : donde definimos la entidad agente / en caso de test recibe Stub de sinon
+
+module.exports = function setupAgent (AgentModel) { 
    
-  
-  
+
   async function createOrUpdate (agent) {
   
       const cond = { // la condicion de la consulta 
@@ -18,20 +15,20 @@ module.exports = function setupAgent (AgentModel) { // recibe modelo de agente :
         }
       }
    
+      // findOne returna la primera coincidencia 
       const existingAgent = await AgentModel.findOne(cond);
 
       if (existingAgent) {
 
-        const updated = await AgentModel.update(agent, cond) // args : info a actualizar , condicion de actualizacion
-        // esto se actualizo returna numeros de filas es decir mas grande que 1 es verdadero
-        return updated ? AgentModel.findOne(cond) : existingAgent // ternario si es verdadeo , .. : sino ..
+        
+        const updated = await AgentModel.update(agent, cond) 
+        // updated : esto se actualizo returna numeros de filas es decir mas grande que 1 es verdadero
+        return updated ? AgentModel.findOne(cond) : existingAgent 
+                         // si lo actualizo return instancia de db , obtener info directamente de db y no un objeto de js 
 
       }
 
-      
-      /* aqui cuando crea en db me returna objeto complejos de sequelize , yo estoy convertiendo en json (como estoy comparando en mis pruebas) 
-       *
-       */
+      // logica si el agente no existe crearlo : returna objeto de sequilize complejo lo convierto a json 
       const result = await AgentModel.create(agent)
       return result.toJSON()
 
@@ -39,14 +36,14 @@ module.exports = function setupAgent (AgentModel) { // recibe modelo de agente :
 
 
 
-  function findById (id) { // podemos decir este es un servicio 
-    return AgentModel.findById(id) // Modelo con Sequelize tiene un metodo llamada findById()
+  function findById (id) { 
+    return AgentModel.findById(id) 
   }
 
 
-  function findByUuid ( uuid ) { // findByUuid esta funcion no existe como tal dentro del objeto modelo de Sequilize - la Obtenemos de esta forma
+  function findByUuid ( uuid ) { 
+    // findByUuid no existe como tal dentro del onbjeeto modelo sequilize
     return AgentModel.findOne({
-      
       where:{
         uuid
       }
@@ -80,22 +77,14 @@ module.exports = function setupAgent (AgentModel) { // recibe modelo de agente :
   }
 
 
-
-
-
-
-
-
+  // funciones exportadas dentro del objeto de este servicio 
   return {
     findByUsername,
     findConnected,
     findAll,
     findByUuid,
     createOrUpdate,
-    findById // esta funcion la returnamos en un Objeto : es decir su producto sera returnado en este Objeto 
+    findById 
   }
 
 } 
-/* por conclusion este modulo exporta objeto de servicio de Agente que tiene funciones : podemos decir funciones de servicio Agent 
- * este servicio de Agente atraves de sus funciones comunica con modelo de entidad de agent : medelo sequelize : puesto que sequelize es un modelo para comunicar a un db dependiendo del objeto de config
-*/ 

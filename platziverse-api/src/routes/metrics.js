@@ -28,5 +28,3 @@ router.get('/:uuid/:type',[
 module.exports = router;
 
 
-// dbServicios, que este forma de trabajr con db , podemos crear archivos mdlrs que hacen conectar a diferentes modulos db 
-// asi tendremos conexion a Varios dbs - y cada endpoint tiene libertad de implementar el modulo de db que le conviene siguiendo el misma arquetectura

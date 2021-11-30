@@ -4,7 +4,8 @@
   "description": "IoT Platform - Iode Agent",
   "main": "src/index.js",
   "scripts": {
-    "examples": "node src/examples/index"
+    "examples": "node src/examples/index",
+    "lint": "standard"
   },
   "author": "Mohssine",
   "license": "MIT",
@@ -13,6 +14,7 @@
     "defaults": "^1.0.3",
     "mqtt": "^4.2.8",
     "platziverse-tools": "file:../platziverse-tools",
+    "standard": "^16.0.4",
     "uuid": "^8.3.2"
   }
 }

@@ -4,29 +4,27 @@ const { GetAgents, GetAgent } = require('../controller/agents');
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-
-
-
-// acumulador de err de mdlrs de express
-//const { validarCampos } = require('../middlewares/validar-campos');
+const guard = require('express-jwt-permissions')() // requerir y llamar como funcion 
 
 
 
 
 
 
-// Router funccion extraeda del paquete express 
 const router = Router();
 
 router.get('/', [ 
-  validarJWT,
-  validarCampos
-], GetAgents );
+  // mdlrs independientes de ruta ...
+  validarJWT, // concepto autenticacion jwt 
+  validarCampos, // handler de la ruta 
+  // modulo para permisos que viajan dentro de jwt : 50 - no hace falta disparrlo antes de validarCampos : funciona con errorHandler mdlr xpress
+  guard.check(['metrics:read']) // [permisos .... ] concepto autorizacion jwt 
+], GetAgents ); // controller
+
 router.get('/:uuid',[
   validarJWT,
   validarCampos
 ] ,GetAgent );
-
 
 
 

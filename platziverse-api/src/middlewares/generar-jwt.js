@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken')
 
 
 
-function sign (payload, secret, callback) {
-  jwt.sign(payload, secret, callback)
- 
- 
- // jwt.sign(payload, , callback)
+const sign = async (payload, secret ) => {
 
+   // jwt.sign(payload, secret, callback)  clg
+
+   const sign = await jwt.sign(payload, secret)
+   return sign
 
 }
 
@@ -17,7 +17,11 @@ function sign (payload, secret, callback) {
 
 module.exports = {
   sign
- /*  verify */
+
 }
 
-// vide 48 crear token en cosola para aprobarlo
+
+ // uso de funcion de generacion de jwt - en cualquier controler o ruta para genracion de apikey en este caso jwt
+    //  const token = await sign({username: 'mohssine' }, 'platzi')
+    //  console.log( '==>',token);
+

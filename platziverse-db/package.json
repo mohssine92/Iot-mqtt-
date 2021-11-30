@@ -1,23 +1,23 @@
 {
   "name": "platziverse-db",
   "version": "1.0.0",
-  "description": "A simple IoT Platform - DB Module : este es modul de Db ",
+  "description": "A simple IoT Platform - DB Module ",
   "main": "index.js",
   "scripts": {
-    "test": "set DEBUG=platziverse:* && nyc --reporter=lcov --report-dir=coverage/ ava tests/* --verbose && start coverage/lcov-report/index.html",
-    "setup": "SET DEBUG=platziverse:* && node setup.js",
+    "test": "DEBUG=platziverse:* nyc --reporter=lcov ava tests/* --verbose start coverage/lcov-report/index.html",
+    "setup": "DEBUG=platziverse:* node setup.js",
     "lint": "standard"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohssine92/platziverse.git"
+    "url": "git+https://github.com/mohssine92/Iot-mqtt-.git"
   },
   "author": "mohssine",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mohssine92/platziverse/issues"
+    "url": "https://github.com/mohssine92/Iot-mqtt-.git/issues"
   },
-  "homepage": "https://github.com/mohssine92/platziverse#readme",
+  "homepage": "https://github.com/mohssine92/Iot-mqtt-.git#readme",
   "devDependencies": {
     "ava": "^3.15.0",
     "nyc": "^15.1.0",

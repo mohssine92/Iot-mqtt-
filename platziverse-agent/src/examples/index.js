@@ -3,9 +3,10 @@
 const PlatziverseAgent = require('../')
 
 const agent = new PlatziverseAgent({
-  name: 'platzi',
+  name: 'abdu',
   username: 'platzi',
-  interval: 1000 
+  interval: 1000 ,
+  
 })
 
 agent.addMetric('rss', function getRss() {
@@ -41,4 +42,12 @@ function eventHandler(payload) {
   console.log(payload)
 }
 
-setTimeout(() => agent.disconnect(), 10000)
+function desconection () {
+  setTimeout(() => agent.disconnect(), 5000)
+}
+
+
+// paraque no de desconecte nuestro agente y siguimos viendo las metricas en tiempo real 
+//desconection()
+
+//setTimeout(() => agent.disconnect(), 5000)

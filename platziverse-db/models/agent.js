@@ -1,17 +1,17 @@
-'use strict' // definicion del modelo usando squilize (objeto nativo : crea instancia db )
+'use strict'
 
-const Sequelize = require('sequelize') // para definir tipo de datos de nuestro modelo
-const setupDatabase = require('../lib/db') //  Modulo que haga instancia a db - requiere arg config (objeto) (variables de entorno , dialecto )
+ // para definir tipo de datos de nuestro modelo
+const Sequelize = require('sequelize')
 
-/* modelo agent asi automaticly creara tabla con nombre agents
- +
-*/
-module.exports = function setupAgentModel (config) { // recibo objeto de config por fin de obtener instancia a db atraves del modulo pequeño que acabo de crea
-  // Obtener instancia de la db
-  // si exita la conexion a db , la tabla y campos seran definidos ...
+const setupDatabase = require('../lib/db') 
+
+
+module.exports = function setupAgentModel (config) {
+  
+  // returna singlton de sequilize que comunica a db segun config object : podemos decir es instancia de db 
   const sequelize = setupDatabase(config)
 
-  return sequelize.define('agent', { // En objeto sequilize nativo hay una funcion define para definir los modelos
+  return sequelize.define('agent', { // En objeto sequilize nativo hay una funcion define para definir los modelos utulizando objeto sensillo de js 
 
     uuid: {
       type: Sequelize.STRING,
@@ -36,7 +36,7 @@ module.exports = function setupAgentModel (config) { // recibo objeto de config 
     admin: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: false // valor  por default
+      defaultValue: false // valor  por default a insertar en tabla
     },
     connected: { // en dashboard me interesa ver solo los agentes que estan conectados (bolean) para identificar los que estan conectados
       type: Sequelize.BOOLEAN,
@@ -46,4 +46,4 @@ module.exports = function setupAgentModel (config) { // recibo objeto de config 
 
   })
 } // asi cada vez llamamos a esta funcion nos returna el modelo
-// de esta manera hemos definido la funcion de configuracion del modelo Agente
+// de esta manera hemos definido la funcion : setupAgentModel de configuracion del modelo Agente

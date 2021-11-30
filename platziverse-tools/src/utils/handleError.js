@@ -2,9 +2,12 @@
 
 const chalk = require('chalk')
 
+
 function handleError(error) {
+ 
   console.error(`${chalk.red('[error]:')} ${error.message}`)
-  console.error(error.stack)
+  // stack saber exactamente tipo de err ocurrio 
+  console.error(error.stack) 
   
 }
 
