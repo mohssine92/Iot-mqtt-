@@ -79,8 +79,14 @@ class Server {
       this.agent = new platziverseagent(); 
       this.agent.connect()
 
-      // pipe todos eventos agente los envia al socket 
-      pipe(this.agent, this.io);
+      // this.agent.on('agent/message', payload => {
+      //    this.io.emit('agent/message' , payload)
+      //    console.log(payload);
+      // })
+
+
+       // pipe todos eventos agente los envia al socket 
+       pipe(this.agent, this.io);
 
 
 

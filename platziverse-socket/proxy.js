@@ -34,46 +34,51 @@ api.get('/agents', async (req, res, next) => {
     res.json(result);
 })
 
+// ok
 api.get('/agent/:uuid', async (req, res, next) => {
+ 
   const { uuid } = req.params
-  const options = {
-    method: 'GET',
-    url: `${endpoint}/api/agent/${uuid}`,
-    headers: {
-      'Authorization': `Bearer ${apiToken}`
-    },
-    json: true
-  }
 
   let result
+
+  const instance = axios.create({
+    baseURL: `${endpoint}/api/agents/${uuid}`,
+   // timeout: 1000,
+    headers: {'apiToken': `${apiToken}`}
+  });
+
+  
   try {
-    result = await request(options)
+    const  { data } = await instance.get();
+    result = data
   } catch (e) {
     return next(new Error(e.error.error))
   }
 
-  res.send(result)
+  res.json(result)
 })
 
 api.get('/metrics/:uuid', async (req, res, next) => {
+ 
   const { uuid } = req.params
-  const options = {
-    method: 'GET',
-    url: `${endpoint}/api/metrics/${uuid}`,
-    headers: {
-      'Authorization': `Bearer ${apiToken}`
-    },
-    json: true
-  }
-
+  
   let result
+
+  const instance = axios.create({
+    baseURL: `${endpoint}/api/metrics/${uuid}`,
+   // timeout: 1000,
+    headers: {'apiToken': `${apiToken}`}
+  });
+
+  
   try {
-    result = await request(options)
+    const  { data } = await instance.get();
+    result = data
   } catch (e) {
     return next(new Error(e.error.error))
   }
 
-  res.send(result)
+  res.json(result)
 })
 
 
