@@ -1,0 +1,1 @@
+este projecto esta listo con coamdo de ejecucion de scripts en mac
