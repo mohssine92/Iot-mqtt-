@@ -83,7 +83,7 @@ class PlatziverseAgent extends EvenEmitter {
                     pid: process.pid
                   },
                   metrics: [],
-                  //timestamp: new Date().getTime()
+                  timestamp: new Date().getTime()
                 }
     
                

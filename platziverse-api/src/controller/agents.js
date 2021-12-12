@@ -1,6 +1,6 @@
 const debug = require('debug')('platziverse:api:controller')
 
-const { response , request } = require('express');
+const { response   } = require('express');
 const { MyServices } = require('../db/db');
 
 
@@ -13,10 +13,9 @@ const GetAgents = async(req, res = response, next ) =>{
     const { user } = req;  // paylod jwt = user  
     const { uuid } = user;
 
+    console.log(user);
+
     try {
-
-   
-
 
       const { Agent } = await MyServices();
    
@@ -29,7 +28,8 @@ const GetAgents = async(req, res = response, next ) =>{
       // validar si es admin : aldminisrador ver todos agent - si no es ve solo el suyo
       const agent = await Agent.findByUuid( uuid );
       const { admin } = agent;
-     
+
+      
      
       let agents = []; 
       if( admin ){

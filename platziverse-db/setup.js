@@ -10,6 +10,8 @@ const { handleFatalError } = utils
 const inquirer = require('inquirer') // decisiones atraves de consola
 const chalk = require('chalk') // colore en consola estizar strings 
 const db = require('./')
+// ayuda a  recibir args flags por script de ejcuccion 
+const minimist = require('minimist') 
 
 
 
@@ -18,9 +20,13 @@ const prompt = inquirer.createPromptModule()
 
 async function setup () {
   
+  const args = minimist(process.argv.slice(2))
+ // console.log(args.yes);
+
+  
   // al ejecutar script de db pasarle un flag --y , asi haga la configuracion sin pregunta humana prompt 
-  // node setup.js "--y" proceso automatizado , caso de deploy 
-  if (process.argv.pop() == '--y') {
+  //  node setup.js --yes proceso automatizado , caso de deploy 
+  if (args.yes) {
     
     console.log('proceso automatico');
   

@@ -1,0 +1,30 @@
+{
+  "name": "platziverse-cli",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Simple IoT Platform - Cli ",
+  "bin": "platziverse.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohssine92/Iot-mqtt-.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohssine92/Iot-mqtt-/issues"
+  },
+  "homepage": "https://github.com/mohssine92/Iot-mqtt-#readme",
+  "devDependencies": {
+    "standard": "^16.0.4"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.10.1",
+    "minimist": "^1.2.5",
+    "moment": "^2.29.1",
+    "platziverse-agent": "file:../platziverse-agent"
+  }
+}

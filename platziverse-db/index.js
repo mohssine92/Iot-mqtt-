@@ -1,5 +1,10 @@
 'use strict'
 
+// longjohn nos da inf sobre el err  stack3  del loop async - no es recomendale su uso en produccion 
+if (process.env.NODE_ENV !== "production") {
+  require('longjohn')
+}
+
 // configuracion db , instancia singlton de la mimsa
 const setupDatabase = require('./lib/db')
 
@@ -75,4 +80,4 @@ module.exports = async function (config) {
 
 
 // arquitectura : entidad Agent aquella app que se va a conectar a servidor realtime mqtt y cada cierto tiempo va a reportar unas metricas que va a ser asociadas a ese agente
-// Metrica tambien es una entidad 
+// Metrica tambien es una entidad  

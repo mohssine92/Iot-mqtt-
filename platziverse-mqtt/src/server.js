@@ -125,8 +125,8 @@ aedes.on('publish', async (packet, client) => {
          agent = await AgentService.createOrUpdate({
            // copy the agent and set the property `connected: true`
            ...payload.agent, // desestructurar props del object agent 
-           //admin, luego veremos como manejamos admin si atraves de APi
-           connected: true // is connected
+           admin : true,
+           //connected: true // is connected
           })
           debug(`[saved-agent]: ${agent.id}`)
    
